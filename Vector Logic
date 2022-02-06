@@ -1,0 +1,38 @@
+#Vector logic
+def vector_cap(v1,A): #Caps every element in v1 at A
+    output = []
+    for j in range(len(v1)):
+        output.append(cap(v1[j],A))
+    return(output)
+
+def vector_adder(v1,v2):#Adds v1 to v2
+    output = []
+    for j in range(len(v1)):
+        output.append(v1[j] + v2[j])
+    return(output)
+
+def vector_magnitude(v1): #Finds the magnitude of v1
+    output = 0
+    for j in range(len(v1)):
+        output+=v1[j]**2
+    output = output**0.5
+    return(output)
+
+def vector_difference(v2,v1): #How to get from first input to second input
+    output = []
+    for j in range(len(v1)):
+        output.append(v1[j] - v2[j])
+    return(output)
+
+def vector_multiply(v1,c): #multiplies v1 by c
+    output = []
+    for j in range(len(v1)):
+        output.append(v1[j]*c)
+    return(output)
+
+def normalize(v1):
+    mag = vector_magnitude(v1)
+    output = []
+    for j in range(len(v1)):
+        output.append(v1[j]/mag)
+    return(output)
