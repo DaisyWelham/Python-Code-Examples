@@ -1,0 +1,81 @@
+import random as r
+
+def base(x):
+    if x[0] == 1:
+        return("Soy milk")
+    elif x[0] == 2:
+        return("Oat milk")
+    elif x[0] == 3:
+        return("Almond milk")
+    elif x[0] == 4:
+        return("Cashew milk")
+    elif x[0] == 5:
+        return("Rice milk")
+    elif x[0] == 6:
+        return("Pea milk")
+    elif x[0] == 7:
+        return("Hemp milk")
+    elif x[0] == 8:
+        return("Hazelnut milk")
+    elif x[0] == 9:
+        return("Coconut milk")
+    elif x[0] == 10:
+        return("Peanut milk")
+    elif x[0] == 11:
+        return("Macademia milk")
+    elif x[0] == 12:
+        return("Flax milk")
+    elif x[0] == 13:
+        return("Sunflower milk")
+    elif x[0] == 14:
+        return("Vegetable stock")
+    elif x[0] == 15:
+        return("Banana milk")
+    elif x[0] == 16:
+        return("Sage stock")
+    elif x[0] == 17:
+        return("Chilli stock")
+    elif x[0] == 18:
+        return("Rice milk")
+    
+def ingredients(x):
+    if x[1] == 1:
+        print("Onion")
+    if x[2] == 1:
+        print("Mushroom")
+    if x[3] == 1:
+        print("Carrot")
+    if x[4] == 1:
+        print("Parsnip")
+    if x[5] == 1:
+        print("Radish")
+    if x[6] == 1:
+        print("Potato")
+    if x[7] == 1:
+        print("Brocolli")
+    if x[8] == 1:
+        print("Tomato")
+    if x[9] == 1:
+        print("Turnip")
+    if x[10] == 1:
+        print("Peas")
+    if x[11] == 1:
+        print("Swede")
+    if x[12] == 1:
+        print("Red Onion")
+    if x[13] == 1:
+         print("Lentils")
+    return()
+
+def generate():
+    x = [r.randint(1,18)]
+    for j in range(100):
+        x.append(r.randint(0,1))
+    return(x)
+
+for n in range(10):
+    x = generate()
+    print(base(x))
+    ingredients(x)
+    print("")
+    print("")
