@@ -1,0 +1,96 @@
+import random as r
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Vector logic
+def vector_adder(v1,v2):#Adds v1 to v2
+    output = []
+    for j in range(len(v1)):
+        output.append(v1[j] + v2[j])
+    return(output)
+
+def vector_difference(v2,v1): #How to get from first input to second input
+    output = []
+    for j in range(len(v1)):
+        output.append(v1[j] - v2[j])
+    return(output)
+
+def vector_multiply(v1,c): #multiplies v1 by c
+    output = []
+    for j in range(len(v1)):
+        output.append(v1[j]*c)
+    return(output)
+
+def point():
+    x1 = r.uniform(-10,10)
+    return([x1])
+
+def generate_points(N):
+    particles = []
+    for n in range(N):
+        particles.append(point())
+    return(particles)
+
+def f(x):
+    if np.fabs(x[0]) > 3:
+        return(x[0]**2 + 1+(1+np.sin(x[0]))*x[0])
+    else:
+        return(1+(1+np.sin(x[0]))*x[0])
+
+def generate_particles(N):
+    particles = []
+    for n in range(N):
+        particle = []
+        A = point() #Used to reduce runtime
+        B = vector_multiply(A,0)#Particles start at rest
+        C = f(A) #Value of current position
+        particle.append(A) #Current position
+        particle.append(B) #Initial velocity
+        particle.append(C) #Point's current value
+        particle.append(A) #Best ever position of this particle
+        particle.append(C) #Best ever value of this particle
+        particles.append(particle)
+    return(particles)
+
+def PSO(n_particles,n_iterations,f):
+    x_data = generate_particles(n_particles)
+    x_best = x_data[0][0]
+    y_best = x_data[0][2]
+    y_best_data = []
+    x_best_data = []
+    for n in range(n_iterations):
+        for j in range(n_particles):
+            
+            #Checking if we found a new best 
+            D = x_data[j][0] # Used to reduce runtime- current position
+            A = f(x_data[j][0]) #Used to reduce runtime- value of current position
+            if A < y_best:
+                y_best = A
+                x_best = x_data[j][0]
+
+            #Direction of each acceleration vector
+            B = vector_difference(D,x_best) #The distance from current position to x_best
+            C = vector_difference(D,x_data[j][3])#The distance from current position to the particle's best ever position
+            
+            #Updating the velocity
+            E = x_data[j][1] #Used to reduce runtime- current velocity
+            E = vector_adder(E,B)
+            E = vector_adder(E,C)
+            
+            #Scaling each acceleration vector
+            B = vector_multiply(B,r.uniform(0,1))
+            C = vector_multiply(C,r.uniform(0,1))
+            E = vector_multiply(E,r.uniform(0,1))
+
+            #Updating the position
+            D = vector_adder(D,E) #The current position plus the current velocity
+            F = f(D) #Used to reduce runtime
+            if F < x_data[j][4]:
+                x_data[j][3] = D #New best position is current position
+                x_data[j][4] = F #The value of the best position is the value of the current position
+            x_data[j][0] = D #New position is D
+            x_data[j][2] = F #New value is F
+            x_data[j][1] = E #New velocity is E
+        y_best_data.append(y_best)
+        x_best_data.append(x_best)
+    return(x_best_data,y_best_data)
