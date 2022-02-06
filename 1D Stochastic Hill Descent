@@ -1,0 +1,13 @@
+#Objective function
+def f(x):
+    return(x**2)
+    
+import random as r    
+stepSize = int(input("Step size: "))
+numIterations = int(input("Number of iterations: "))
+x = int(input("Initial x"))
+for n in range(numIterations):
+    x2 = x + stepSize*r.uniform(-1,1)
+    if f(x2) < f(x):
+        x = x2
+print("After ", numIterations, " iterations, stochastic hill descent found the minimum ", f(x), "at x =", x)
