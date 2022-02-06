@@ -1,0 +1,343 @@
+####################################Imports#####################################################################################
+import random as r
+import numpy as np
+####################################Lists and vector logic######################################################################
+def bubble_sort(lst):
+    for j in range(len(lst)):
+        for k in range(len(lst)):
+            if lst[j] > lst[k]:
+                lst[j],lst[k] = lst[k],lst[j]
+    return(lst)
+def total(vector):
+    output = 0
+    for j in range(len(vector)):
+        output+= np.fabs(vector[j])
+    return(output)
+
+def normalize(vector):
+    output = []
+    for j in range(len(vector)):
+        output.append((vector[j]/total(vector)))
+    return(output)
+
+def normalize_p(p_vector):
+    p_vector = normalize(p_vector)
+    for j in range(len(p_vector)-1):
+        p_vector[j+1] += p_vector[j]
+    return(p_vector)
+
+def pick_prob(options,p_vector):
+    p_vector = normalize_p(p_vector)
+    randnum = r.uniform(0,1)
+    for j in range(len(p_vector)):
+        if p_vector[j] > randnum:
+            return(options[j])   
+###############################################Context specific################################################################        
+def bonus(num):
+    a = int(num/2)
+    a = a - 5
+    return(a)
+#Races
+races = ["Human","Dragonborn","Dwarf","Elf","Gnome","Half-Elf","Halfling","Half-Orc","Tiefling"]
+r_maturity = [18,15,50,100,40,20,20,14,18]
+r_max_age = [110,80,350,750,490,180,100,80,120]
+
+#Language
+all_languages =["Abyssal","Aquan","Auran","Celestial","Common","Deep Speech","Draconic","Druidic","Dwarvish","Elvish","Giant","Gnomish","Goblin","Gnoll","Halfling","Ignan","Infernal","Orc","Primordial","Sylvan","Terran","Undercommon"]
+def language(race):
+    output = []
+    if race == "Dwarf":
+        output.append("Common")
+        output.append("Dwarvish")
+    elif race == "Elf":
+        output.append("Common")
+        output.append("Elvish")
+    elif race == "Halfling":
+        output.append("Common")
+        output.append("Halfling")
+    elif race == "Dragonborn":
+        output.append("Common")
+        output.append("Draconic")
+    elif race == "Gnome":
+        output.append("Common")
+        output.append("Gnomish")
+    elif race == "Tiefling":
+        output.append("Common")
+        output.append("Infernal")
+    elif race == "Half-Orc":
+        output.append("Common")
+        output.append("Orc")
+    elif race == "Half-Elf":
+        output.append("Common")
+        output.append("Elvish")
+        a = r.choice(all_languages)
+        while a == "Common" or a == "Elvish":
+            a = r.choice(all_languages)
+        output.append(a)
+    elif race == "Human":
+        output.append("Common")
+        a = r.choice(all_languages)
+        while a == "Common":
+            a = r.choice(all_languages)
+        output.append(a)
+    print("Speaks:", output[0])
+    for j in range(len(output)-1):
+        print("Also speaks:", output[j+1])
+    return()
+    
+def age(race):
+    for j in range(len(races)):
+        if races[j] == race:
+            agemax = r_max_age[j]
+    agemid = agemax/3.5
+    age_out = r.gauss(agemid,agemax/5)
+    while age_out < 0 or age_out > agemax:
+        age_out = r.gauss(agemid,agemax/5)
+    age_out = int(age_out)
+    print("Age =",age_out,"years",r.randint(0,11),"months")
+    return(age_out)
+
+def stats(char_class,race):
+    stat_tots = []
+    for k in range(6):
+        stat = []
+        for j in range(4):
+            stat.append(r.randint(1,6))
+        stat_tot = 0
+        for j in range(4):
+            stat_tot+=stat[j]
+        stat_tot-=np.min(stat)
+        stat_tots.append(stat_tot)
+    stat_tots = bubble_sort(stat_tots)
+    s = stat_tots    
+        
+    if char_class == "Druid":
+        o = [s[4],s[1],s[2],s[3],s[0],s[5]]
+        
+    elif char_class == "Wizard":
+        o = [s[5],s[2],s[1],s[0],s[3],s[4]]
+        
+    elif char_class == "Warlock":
+        o = [s[5],s[1],s[2],s[3],s[4],s[0]]
+        
+    elif char_class == "Sorcerer":
+        o = [s[5],s[1],s[2],s[4],s[3],s[0]]
+        
+    elif char_class == "Bard":
+        o = [s[5],s[1],s[2],s[3],s[4],s[0]]
+    
+    elif char_class == "Ranger":
+        o = [s[4],s[0],s[1],s[3],s[2],s[5]]
+    
+    elif char_class == "Fighter":
+        o = [s[0],s[5],s[1],s[2],s[3],s[4]]
+        
+    elif char_class == "Rogue":
+        o = [s[5],s[0],s[1],s[2],s[3],s[4]]
+        
+    elif char_class == "Paladin":
+        o = [s[0],s[3],s[2],s[4],s[5],s[1]]
+    
+    elif char_class == "Barbarian":
+        o = [s[0],s[2],s[1],s[5],s[4],s[3]]
+    
+    elif char_class == "Cleric":
+        o = [s[2],s[3],s[1],s[5],s[0],s[4]]
+        
+    elif char_class == "Monk":
+        o = [s[3],s[0],s[1],s[4],s[2],s[5]]
+    
+    else:
+        print("New class?")
+        o = s
+        
+    s = o  
+    if race =="Dwarf":
+        s[2] += 2
+    elif race == "Elf":
+        s[1] += 2
+    elif race == "Halfling":
+        s[1] += 2
+    elif race == "Human":
+        s[0]+=1
+        s[1]+=1
+        s[2]+=1
+        s[3]+=1
+        s[4]+=1
+        s[5]+=1
+    elif race == "Dragonborn":
+        s[0] += 2
+        s[5] +=1
+    elif race == "Gnome":
+        s[3] += 2
+    elif race == "Half-Elf":
+        s[5] += 2
+        if char_class == "Druid":
+            s[1]+=1
+            s[4]+=1
+        elif char_class == "Wizard":
+            s[2]+=1
+            s[3]+=1
+        elif char_class == "Warlock":
+            s[1]+=1
+            s[2]+=1
+        elif char_class == "Sorcerer":
+            s[1]+=1
+            s[2]+=1
+        elif char_class == "Bard":
+            s[1] +=1
+            s[2] +=1
+        elif char_class == "Ranger":
+            s[1] +=1
+            s[2] +=1
+        elif char_class == "Fighter":
+            s[0] +=1
+            s[2] +=1
+        elif char_class == "Rogue":
+            s[1] +=1
+            s[2] +=1
+        elif char_class == "Paladin":
+            s[0] +=1
+            s[2] +=1
+        elif char_class == "Barbarian":
+            s[0] +=1
+            s[2] +=1
+        elif char_class == "Cleric":
+            s[2]+=1
+            s[4]+=1
+        elif char_class == "Monk":
+            s[1] +=1
+            s[2] +=1
+        else:
+            print("New class?")
+            s[0]+=1
+            s[1]+=1
+        
+        a = r.randint(0,4)
+        b = r.randint(0,4)
+        while a == b:
+            b = r.randint(0,4)
+        s[a] +=1
+        s[b] +=1
+    elif race == "Half-Orc":
+        s[0] +=2
+        s[2] +=1
+    elif race == "Tiefling":
+        s[3]+=1
+        s[5]+=2
+    
+    stat_names = ["Strength","Dexterity","Cosntitution","Intelligence","Wisdom","Charisma"]
+    for j in range(6):
+        print(stat_names[j],"total",s[j], "Bonus :", bonus(s[j]))
+        
+    return(s)
+
+
+def alignment(race):
+    morality = ["Good","Neutral","Evil"]
+    orderity = ["Lawful","Neutral","Chaotic"]
+    balance = [1,1,1]
+    prio_1 = [2,1,0.5]
+    prio_2 = [0.5,1,2]
+    prio_3 = [2,0.5,1]
+    a = pick_prob(morality,[1,1,1])
+    b = pick_prob(orderity,[1,1,1])
+    if race == "Dwarf":
+        b = pick_prob(orderity,prio_1)
+    elif race == "Elf":
+        a = pick_prob(morality,prio_1)
+        b = pick_prob(orderity,prio_2)
+    elif race == "Halfling":
+        a = pick_prob(morality,prio_1)
+        b = pick_prob(orderity,prio_1)
+    elif race == "Dragonborn":
+        a = pick_prob(morality,prio_3)
+    elif race == "Gnome":
+        a = pick_prob(morality,prio_1)
+    elif race == "Half-Elf":
+        b = pick_prob(orderity,prio_2)
+    elif race == "Half-Orc" or race == "Tiefling":
+        a = pick_prob(morality,prio_2)
+        b = pick_prob(orderity,prio_2)
+    elif race != "Human":
+        print("New race?")
+    if a == b:
+        print("True Neutral")
+    else:
+        print(b, a)
+    return()
+
+def class_generator():
+    classes = ["Druid","Wizard","Warlock","Sorcerer","Bard","Ranger","Fighter","Rogue","Paladin","Barbarian","Cleric","Monk"]
+    a = r.choice(classes)
+    b = r.choice(classes)
+    if a != b and r.uniform(0,1) < 0.1:
+        print(a,"/",b,"dual class")
+        return(r.choice([a,b]))
+    else:
+        print(a)
+        return(a)
+
+def c_generator(N):
+    for n in range(N):
+        #Race
+        race = r.choice(races)
+        race = "Half-Elf"
+        print(race)
+        medium = ["Human","Elf","Half-Elf","Half-Orc","Tiefling"]
+        small3 = ["Gnome","Halfling"]
+        small4 = ["Dwarf"]
+        medium_plus = ["Dragonborn"]
+
+
+        #What is the character's alignment?
+        alignment(race)
+
+        #What class is the character?
+        char_class = class_generator()
+        char_class = "Ranger"
+
+        #Gender
+        gender = pick_prob(["M","F","N/A"],[100,0,0])
+        print("Gender:",gender)
+
+        #How old is the character
+        char_age = age(race)
+
+        #Height
+        modifier = 1
+        if gender == "F":
+            modifier -= 0.1
+        if race in small3:
+            modifier = modifier*0.642424242426
+        if race in small4:
+            modifier = modifier*0.812121212121
+        if race == "Half-Orc":
+            modifier = 1.05*modifier
+        if race in medium_plus:
+            modifier = 1.2*modifier
+        for j in range(len(races)):
+            if races[j] == race:
+                if char_age < r_maturity[j]:
+                    modifier = modifier * (char_age/r_maturity[j])**0.5
+        height = r.gauss(165,10)*modifier
+        print("Height:",int(height), "cm")
+
+        #Mass
+        modifier = r.gauss(1,0.05)
+        bulky = ["Half-Orc","Dwarf","Dragonborn"]
+        slender = ["Elf", "Half-Elf","Tiefling"]
+        if race in bulky:
+            modifier = modifier * 1.05
+        elif race in slender:
+            modifier = modifier * 0.95
+        mass = modifier*0.0035*height**2
+        print("Mass: ",int(mass),"kg")    
+        stats(char_class,race)
+
+        language(race)
+        
+        print("")
+        print("")
+
+c_generator(10)
