@@ -1,0 +1,107 @@
+import numpy as np
+import random as r
+
+data = [[1,2],[2,4],[3,5],[4,4],[5,5],[6,8],[7,8]]
+
+N = 10**4 #number of iterations
+
+def line(m,c,x):
+    return(m*x + c)
+
+def error(m,c):
+    output = 0
+    for j in range(len(data)):
+        output+= (line(m,c,data[j][0])-data[j][1])**2
+    return(output)
+
+print("Initialisation complete")
+
+def grid_search(ml,mu,cl,cu,N_iterations):
+    output_1 = 0
+    output_2 = 0
+    for M in np.linspace(ml,mu,int(N_iterations**0.5)):
+        for C in np.linspace(cl,cu,int(N_iterations**0.5)):
+            if error(M,C) < error(output_1,output_2):
+                output_1 = M
+                output_2 = C
+    return(output_1,output_2)
+
+grid_results = grid_search(0,1,0,3,N)
+
+print(N,"iterations of grid search found m =", grid_results[0], "and c =", grid_results[1])
+
+def random_search(ml,mu,cl,cu,N_iterations):
+    output_1 = 0
+    output_2 = 0
+    for n in range(N_iterations):
+        M = r.uniform(ml,mu)
+        C = r.uniform(cl,cu)
+        if error(M,C) < error(output_1,output_2):
+            output_1 = M
+            output_2 = C
+    return(output_1,output_2)
+
+random_results = random_search(0,1,0,3,N)
+
+
+print(N,"iterations of random search found m =", random_results[0], "and c =", random_results[1])
+
+def gradient_descent(start,step_size,N_iterations):
+    output_1 = start[0]
+    output_2 = start[1]
+    for n in range(N_iterations):
+        output_1 -= 0.05*(error(output_1+step_size,output_2) - error(output_1,output_2))
+        output_2 -= 0.05*(error(output_1,output_2+step_size) - error(output_1,output_2))
+    return(output_1,output_2)
+
+gradient_results = gradient_descent([1,1],0.01,N)
+
+print(N,"iterations of gradient descent found m =", gradient_results[0], "and c =", gradient_results[1])
+
+def stochastic_gradient_descent(start,step_size,N_iterations):
+    output_1 = start[0]
+    output_2 = start[1]
+    for n in range(N_iterations):
+        m = output_1 + r.uniform(-step_size,step_size)
+        c = output_2 + r.uniform(-step_size,step_size)
+        if error(m,c) < error(output_1,output_2):
+            output_1 = m
+            output_2 = c
+    return(output_1,output_2)
+
+stochastic_results = stochastic_gradient_descent([1,1],0.01,N)
+
+print(N, "iterations of stochastic gradient descent found m =", stochastic_results[0], "and c =", stochastic_results[1])
+
+def genetic_algorithm(ml,mu,cl,cu,gen_L,N_iterations,mutation_size,threshold):
+    gen_0 = []
+    for l in range(gen_L):
+        gen_0.append([r.uniform(ml,mu),r.uniform(cl,cu)])
+    current_gen = gen_0
+    for n in range(N_iterations):
+        next_gen = []
+        for l in range(gen_L):
+            if error(current_gen[l][0],current_gen[l][1]) < threshold:
+                next_gen.append(current_gen[l])
+        while len(next_gen) < gen_L and n != N_iterations:
+            parent_1 = next_gen[r.randint(0,len(next_gen)-1)]
+            parent_2 = next_gen[r.randint(0,len(next_gen)-1)]
+            next_gen.append([parent_1[0]+r.uniform(-mutation_size,mutation_size),parent_2[1]+r.uniform(-mutation_size,mutation_size)])
+        current_gen = next_gen 
+    return(current_gen)
+
+last_gen = genetic_algorithm(0,3,0,3,1000,N,0.1,5)
+
+def analysis(data):
+    m = 0
+    c = 0
+    for j in range(len(data)):
+        m+= data[j][0]
+        c+= data[j][1]
+    output_1 = m/len(data)
+    output_2 = c/len(data)
+    return(output_1,output_2)
+
+genetic_results = analysis(last_gen)
+
+print(N, "iterations of the genetic algorithm with generation size one thousand and threshold 2.5 found m =", genetic_results[0], "and c =", genetic_results[1])
