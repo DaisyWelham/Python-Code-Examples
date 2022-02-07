@@ -1,0 +1,7 @@
+def random_search(f,N_iterations,x_min,x_max):
+    x_best = x_min
+    for n in range(N_iterations):
+        x_guess = r.uniform(x_min,x_max)
+        if f(x_guess) < f(x_best):
+            x_best = x_guess
+    return(x_best)
