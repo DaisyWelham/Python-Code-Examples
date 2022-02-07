@@ -1,0 +1,25 @@
+import random as r
+
+def f_derivative(x):
+    return(2*x+1)
+
+#Doing stochastic gradient descent with an explicitly coded derivative function
+def stochastic_gradient_descent(f,N_iterations,f_derivative,x_start,step_size):
+    x=x_start
+    for n in range(N_iterations):
+        x = x - f_derivative(x)*step_size*r.uniform(0,1)
+    return(x)
+
+def f_derivative_approx(f,x):
+    if x!=0:
+        dx = x*10**-10
+    else:
+        dx=10**-10
+    return((f(x+dx)-f(x))/dx)
+    
+#Doing stochastic gradient descent using an empirically approximated derivative
+def stochastic_gradient_descent_approx(f,N_iterations,x_start,step_size):
+    x=x_start
+    for n in range(N_iterations):
+        x = x - f_derivative_approx(f,x)*step_size*r.uniform(0,1)
+    return(x)
