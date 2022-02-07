@@ -1,0 +1,11 @@
+import numpy as np
+
+def f(x):
+    return(x**2+x)
+
+def trapezium_rule(lower_lim,upper_lim,N_rectangles,f):
+    x_values = np.linspace(lower_lim,upper_lim,N_rectangles)
+    area = 0
+    for j in range(len(x_values)-1):
+        area+= ((upper_lim-lower_lim)/N_rectangles)*(f(x_values[j])+f(x_values[j+1]))/2
+    return(area)
