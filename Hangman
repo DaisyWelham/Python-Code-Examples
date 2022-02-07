@@ -1,0 +1,57 @@
+import random as r
+
+#Initial state
+words = ["ails","aims","aide","aided",
+         "brunt","burns""burnt","buzz",
+         "crispy","crumb","crust","crusty",
+         "dainty","daisy","dolt","dust",
+         "eek","eel",
+         "fall","fails","faint","feel","fiend","find","found","friend","fuzz",
+         "gala","gale","gall",
+         "hail","hall","halt",
+         "jail","jolt","jump",
+         "kind","king","kins",
+         "jazz","join","joins","joined","joint",
+         "lined","lint",
+         "mail","mint","minty",
+         "nail","neat","need",
+         "pails","paint","pant","pants","pinned","pint","point","puns","punt",
+         "rails","read","reed","reel","rent","runs","runt","rust",
+         "said","sails","saint","seat","seal","seed","sent","ship","shin","skill","skin","skip",
+         "taint","thumb","tinned","tins","tint",
+         "wade","wait","wail","wean","weed","went","whey","wind"] #Words that may be chosen
+guesses = 12 #Number of guesses the player gets
+
+chosen_word = [c for c in r.choice(words)]
+guessed_letters = []
+for j in range(len(chosen_word)):
+    guessed_letters.append("_ ")
+    
+def numIn(seed,key):
+    output = 0
+    for j in range(len(seed)):
+        if seed[j] == key:
+            output+=1
+    return(output)
+    
+def print_nicely(lst):
+    output = ""
+    for j in range(len(lst)):
+        output+=lst[j]
+    print(output)
+    return(output)
+    
+while guesses > 0 and numIn(guessed_letters,"_ ") > 0:
+    print_nicely(guessed_letters)
+    print("You have", guesses-1, "lives remaining")
+    user_guess = input("What will your guess be?      ")
+    if numIn(chosen_word,user_guess)>0:
+        for j in range(len(chosen_word)):
+            if chosen_word[j] == user_guess:
+                guessed_letters[j] = user_guess
+    else:
+        guesses-=1
+if guesses>0:
+    print("Congratulations, you won! The word was: ",print_nicely(chosen_word))
+else:
+    print("Bad luck, you lost! The word was: ",print_nicely(chosen_word))
