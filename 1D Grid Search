@@ -1,0 +1,7 @@
+def grid_search(f,N_iterations,x_min,x_max):
+    x_values = np.linspace(x_min,x_max,N_iterations)
+    x_best = x_min
+    for n in range(N_iterations):
+        if f(x_values[n]) < f(x_best):
+            x_best = x_values[n]
+    return(x_best)
