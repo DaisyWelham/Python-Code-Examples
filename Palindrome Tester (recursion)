@@ -1,0 +1,11 @@
+def isPalindrome(inputWord):
+    word = inputWord
+    if len(inputWord) < 2:
+        print("It is a palindrome")
+        return()
+    elif inputWord[0] != inputWord[-1]:
+        print("It is not a palindrome")
+        return()
+    else:
+        inputWord = inputWord[1:-2]
+        isPalindrome(inputWord)
