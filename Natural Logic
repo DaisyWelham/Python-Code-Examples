@@ -1,0 +1,52 @@
+def split(word1, char):
+    s = ""
+    word1 = [c for c in word1]
+    word2 = word1
+    j = 0
+    while word1[-j-1] != char:
+        word2 = [s.join(word1[0:-j-2]),s.join(word1[-1-j:])]
+        j+=1
+    return(word2)
+
+def impi(formula1):
+    return("formula:", split(formula1,">")[1], "assumption:" , split(formula1,">")[0])
+
+def andi(formula1):
+    return(split(formula1,"&"))
+
+def oril(formula1):
+    return(split(formula1,"v")[0])
+  
+def orir(formula1):
+    return(split(formula1,"v")[1])  
+
+def raa(formula1):
+    s=""
+    return(s.join(["!!(",formula1,")"]))
+
+def eqf(formula1):
+    return("F")
+
+def andel(formula1):
+    b = input("What is the other formula?")
+    s=""
+    return(s.join([formula1," & ",b]))
+
+def ander(formula1):
+    b = input("What is the other formula?")
+    s=""
+    return(s.join([b," & ",formula1]))
+
+def impe(formula1):
+    b = input("What is the other formula?")
+    s = ""
+    return(s.join([b," > ", formula1]), b)
+
+def ore(formula1):
+    a = input("What is A?")
+    b = input("What is B?")
+    s = ""
+    aOrb = s.join([a, " v ", b])
+    aImpc = s.join([a, " > ", formula1])
+    bImpc = s.join([b, " > ", formula1])
+    return(aOrb, aImpc, bImpc)
